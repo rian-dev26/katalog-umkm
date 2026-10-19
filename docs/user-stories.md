@@ -66,7 +66,7 @@ Kriteria selesai:
 ## Bonus
 
 ### US-07 List Produk
-Sebagai admin, saya ingin produk pada page `/admin` mengambil data dari database.
+Sebagai admin, saya ingin produk pada page `/admin` mengambil data dari database.   
 
 ### US-08 Tambah produk
 

@@ -137,3 +137,165 @@ Buat file proxy.js di root proyek (Next.js 16). Semua rute /admin kecuali /admin
 **Perbaikan:**
 - Menambahkan penanganan kondisi jika tabel kosong ("Belum ada produk") dan pesan error jika query gagal.
 
+
+## US-08 Tambah Produk
+
+**Prompt:**
+[SENDIRI] Buat Server Action tambahProduk di app/admin/actions.js yang menyimpan data produk baru ke tabel produk di Supabase dan kembali ke /admin. Aksi harus memeriksa login admin di server. Sambungkan ke form di app/admin/produk/baru/page.jsx lewat FormProduk dan hapus CatatanBelumAktif.
+
+**Hasil:**
+- Dibuat Server Action `tambahProduk` dengan verifikasi sesi login admin (`supabase.auth.getUser()`).
+- Data nama, harga, kategori, foto_url, dan deskripsi disimpan ke tabel `produk` di Supabase.
+- Berhasil kembali (*redirect*) ke `/admin` setelah simpan berhasil.
+- Komponen `CatatanBelumAktif` dihapus dari `app/admin/produk/baru/page.jsx`.
+
+**Perbaikan:**
+- Menambahkan prop `action` pada `FormProduk` agar dapat memproses form secara fleksibel.
+
+## US-08 Tambah Produk
+
+**Prompt:**
+[SENDIRI] Buat Server Action tambahProduk di app/admin/actions.js yang menyimpan data produk baru ke tabel produk di Supabase dan kembali ke /admin. Aksi harus memeriksa login admin di server. Sambungkan ke form di app/admin/produk/baru/page.jsx lewat FormProduk dan hapus CatatanBelumAktif.
+
+**Hasil:**
+- Dibuat Server Action `tambahProduk` dengan verifikasi sesi login admin (`supabase.auth.getUser()`).
+- Data nama, harga, kategori, foto_url, dan deskripsi disimpan ke tabel `produk` di Supabase.
+- Berhasil kembali (*redirect*) ke `/admin` setelah simpan berhasil.
+- Komponen `CatatanBelumAktif` dihapus dari `app/admin/produk/baru/page.jsx`.
+
+**Perbaikan:**
+- Menambahkan prop `action` pada `FormProduk` agar dapat memproses form secara fleksibel.
+
+
+## US-09 Ubah Produk
+
+**Prompt:**
+[SENDIRI] Ambil data produk lama dari Supabase di app/admin/produk/[id]/ubah/page.jsx berdasarkan ID di URL. Buat Server Action ubahProduk di app/admin/actions.js yang memvalidasi sesi admin dan memperbarui data produk ke database lalu kembali ke /admin. Hapus CatatanBelumAktif.
+
+**Hasil:**
+- Halaman ubah produk menampilkan data lama produk secara otomatis di dalam form.
+- Dibuat Server Action `ubahProduk` yang terproteksi login admin untuk menyimpan pembaruan produk ke Supabase.
+- Kembali ke `/admin` setelah berhasil disimpan.
+- `CatatanBelumAktif` dihapus.
+
+**Perbaikan:**
+- Menyertakan hidden input id pada `FormProduk` agar identitas produk yang diubah terkirim dengan benar ke Server Action.
+
+## US-10 Hapus Produk
+
+**Prompt:**
+[SENDIRI] Buat Server Action hapusProduk di app/admin/actions.js yang menghapus produk dari database dengan proteksi login admin. Pada components/TabelProduk.jsx, buat tombol Hapus meminta konfirmasi browser sebelum menghapus.
+
+**Hasil:**
+- Tombol "Hapus" pada tabel admin memunculkan dialog konfirmasi `confirm()` browser.
+- Dibuat Server Action `hapusProduk` yang menghapus data produk dari tabel `produk` di Supabase.
+- Berhasil memperbarui daftar produk setelah dihapus.
+
+**Perbaikan:**
+- Menggunakan form action terproteksi untuk mencegah penghapusan data secara tidak sengaja.
+
+## US-11 Filter Kategori dan Pencarian
+
+**Prompt:**
+[SENDIRI] Tambahkan kolom pencarian nama produk dan filter kategori pada halaman katalog di app/page.jsx. Ambil kategori unik dari database secara otomatis dan filter query Supabase berdasarkan parameter URL q dan kategori.
+
+**Hasil:**
+- Pengunjung dapat mencari nama produk melalui input pencarian.
+- Pengunjung dapat menyaring produk berdasarkan kategori melalui tombol-tombol filter yang dinamis.
+- Hasil pencarian dan filter ditampilkan secara responsif di katalog.
+
+**Perbaikan:**
+- Menggabungkan parameter pencarian dan kategori agar pengunjung dapat mencari produk dalam kategori tertentu secara bersamaan.
+
+## US-12 Pilih Jumlah Produk
+
+**Prompt:**
+[SENDIRI] Pada components/TombolWhatsApp.jsx, tambahkan pemilih jumlah (quantity selector +/-) agar pengunjung dapat memilih berapa banyak produk yang ingin dipesan sebelum membuka WhatsApp. Tampilkan kalkulasi total harga dan sertakan jumlah pesanan di pesan WhatsApp.
+
+**Hasil:**
+- Terdapat tombol `+` dan `-` untuk menentukan jumlah barang yang ingin dipesan.
+- Total harga otomatis terkalkulasi secara realtime.
+- Tautan WhatsApp memuat format pesan lengkap dengan jumlah produk dan total harga pesanan.
+
+**Perbaikan:**
+- Menetapkan batas minimal pembelian 1 buah agar nilai pesanan selalu valid.
+
+## US-13 Progressive Web App (PWA)
+
+**Prompt:**
+[SENDIRI] Buat file app/manifest.js untuk konfigurasi Web App Manifest agar katalog UMKM dapat di-install di layar HP pengunjung seperti aplikasi native. Hubungkan icon dari public/icons dan daftarkan manifest di metadata layout.
+
+**Hasil:**
+- Dibuat `app/manifest.js` dengan konfigurasi standalone, tema warna, nama toko, dan icon 192px & 512px.
+- Terdaftar di `app/layout.jsx` melalui metadata `manifest` dan `icons`.
+- Aplikasi kini mendukung fitur instalasi PWA ("Add to Home Screen") di perangkat mobile.
+
+**Perbaikan:**
+- Menyesuaikan token warna tema (`#1f6b4f`) agar selaras dengan identitas desain toko.
+
+## US-09 Ubah Produk
+
+**Prompt:**
+[SENDIRI] Ambil data produk lama dari Supabase di app/admin/produk/[id]/ubah/page.jsx berdasarkan ID di URL. Buat Server Action ubahProduk di app/admin/actions.js yang memvalidasi sesi admin dan memperbarui data produk ke database lalu kembali ke /admin. Hapus CatatanBelumAktif.
+
+**Hasil:**
+- Halaman ubah produk menampilkan data lama produk secara otomatis di dalam form.
+- Dibuat Server Action `ubahProduk` yang terproteksi login admin untuk menyimpan pembaruan produk ke Supabase.
+- Kembali ke `/admin` setelah berhasil disimpan.
+- `CatatanBelumAktif` dihapus.
+
+**Perbaikan:**
+- Menyertakan hidden input id pada `FormProduk` agar identitas produk yang diubah terkirim dengan benar ke Server Action.
+
+## US-10 Hapus Produk
+
+**Prompt:**
+[SENDIRI] Buat Server Action hapusProduk di app/admin/actions.js yang menghapus produk dari database dengan proteksi login admin. Pada components/TabelProduk.jsx, buat tombol Hapus meminta konfirmasi browser sebelum menghapus.
+
+**Hasil:**
+- Tombol "Hapus" pada tabel admin memunculkan dialog konfirmasi `confirm()` browser.
+- Dibuat Server Action `hapusProduk` yang menghapus data produk dari tabel `produk` di Supabase.
+- Berhasil memperbarui daftar produk setelah dihapus.
+
+**Perbaikan:**
+- Menggunakan form action terproteksi untuk mencegah penghapusan data secara tidak sengaja.
+
+## US-11 Filter Kategori dan Pencarian
+
+**Prompt:**
+[SENDIRI] Tambahkan kolom pencarian nama produk dan filter kategori pada halaman katalog di app/page.jsx. Ambil kategori unik dari database secara otomatis dan filter query Supabase berdasarkan parameter URL q dan kategori.
+
+**Hasil:**
+- Pengunjung dapat mencari nama produk melalui input pencarian.
+- Pengunjung dapat menyaring produk berdasarkan kategori melalui tombol-tombol filter yang dinamis.
+- Hasil pencarian dan filter ditampilkan secara responsif di katalog.
+
+**Perbaikan:**
+- Menggabungkan parameter pencarian dan kategori agar pengunjung dapat mencari produk dalam kategori tertentu secara bersamaan.
+
+## US-12 Pilih Jumlah Produk
+
+**Prompt:**
+[SENDIRI] Pada components/TombolWhatsApp.jsx, tambahkan pemilih jumlah (quantity selector +/-) agar pengunjung dapat memilih berapa banyak produk yang ingin dipesan sebelum membuka WhatsApp. Tampilkan kalkulasi total harga dan sertakan jumlah pesanan di pesan WhatsApp.
+
+**Hasil:**
+- Terdapat tombol `+` dan `-` untuk menentukan jumlah barang yang ingin dipesan.
+- Total harga otomatis terkalkulasi secara realtime.
+- Tautan WhatsApp memuat format pesan lengkap dengan jumlah produk dan total harga pesanan.
+
+**Perbaikan:**
+- Menetapkan batas minimal pembelian 1 buah agar nilai pesanan selalu valid.
+
+## US-13 Progressive Web App (PWA)
+
+**Prompt:**
+[SENDIRI] Buat file app/manifest.js untuk konfigurasi Web App Manifest agar katalog UMKM dapat di-install di layar HP pengunjung seperti aplikasi native. Hubungkan icon dari public/icons dan daftarkan manifest di metadata layout.
+
+**Hasil:**
+- Dibuat `app/manifest.js` dengan konfigurasi standalone, tema warna, nama toko, dan icon 192px & 512px.
+- Terdaftar di `app/layout.jsx` melalui metadata `manifest` dan `icons`.
+- Aplikasi kini mendukung fitur instalasi PWA ("Add to Home Screen") di perangkat mobile.
+
+**Perbaikan:**
+- Menyesuaikan token warna tema (`#1f6b4f`) agar selaras dengan identitas desain toko.
+

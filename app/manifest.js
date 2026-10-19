@@ -6,7 +6,10 @@ export default function manifest() {
     short_name: toko.nama,
     description: toko.tagline,
     start_url: "/",
+    scope: "/",
+    id: "/",
     display: "standalone",
+    orientation: "portrait",
     background_color: "#ffffff",
     theme_color: "#1f6b4f",
     icons: [
@@ -20,7 +23,14 @@ export default function manifest() {
         sizes: "512x512",
         type: "image/png",
       },
+      {
+        src: "/icons/icon-512.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "maskable",
+      },
     ],
   };
 }
+
 

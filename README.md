@@ -84,6 +84,6 @@ Template workshop vibe coding Creative Hub App Talent (CHAT) 2026. Dibangun meng
 ## Tentang aplikasi ini
 
 - **Nama usaha:** Sirait Coffee
-- **Pembuat:** 
-- **Link aplikasi:** 
+- **Pembuat:** Rian Andika Sirait 
+- **Link aplikasi:** https://katalog-umkm-beta.vercel.app
 - **Fitur bonus yang dikerjakan:** US-07 (List produk admin dari database), US-08 (Tambah produk), US-09 (Ubah produk), US-10 (Hapus produk), US-11 (Filter kategori atau pencarian), US-12 (Pilih jumlah atau varian), US-13 (PWA)

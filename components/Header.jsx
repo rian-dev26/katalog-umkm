@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { toko } from "@/lib/toko";
-import TombolInstalPWA from "@/components/TombolInstalPWA";
 
 export default function Header() {
   return (
@@ -9,8 +8,8 @@ export default function Header() {
         <Link href="/" className="text-lg font-extrabold tracking-tight text-utama">
           {toko.nama}
         </Link>
-        <TombolInstalPWA />
       </div>
     </header>
   );
 }
+

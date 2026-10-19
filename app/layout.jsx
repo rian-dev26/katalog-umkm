@@ -1,6 +1,7 @@
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import TombolInstalPWA from "@/components/TombolInstalPWA";
 import { toko } from "@/lib/toko";
 
 export const metadata = {
@@ -28,7 +29,9 @@ export default function RootLayout({ children }) {
         <Header />
         <main className="mx-auto w-full max-w-5xl flex-1 px-4">{children}</main>
         <Footer />
+        <TombolInstalPWA />
       </body>
     </html>
   );
 }
+

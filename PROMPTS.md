@@ -110,3 +110,30 @@ Buat file proxy.js di root proyek (Next.js 16). Semua rute /admin kecuali /admin
 - **Masalah:** Pada saat awal koneksi Supabase, muncul error `Invalid path specified in request URL`.
 - **Penyebab:** Nilai `SUPABASE_URL` di `.env.local` memiliki akhiran `/rest/v1/`, sedangkan library `@supabase/supabase-js` otomatis menambahkan `/rest/v1/` ke endpoint.
 - **Solusi:** Nilai `SUPABASE_URL` diubah menjadi `https://zqrmvjwlssbszzhntbjg.supabase.co` dan ditambahkan fungsi normalisasi URL otomatis di `lib/supabase/server.js` dan `lib/supabase/session.js`.
+
+## US-07 List Produk
+
+**Prompt:**
+[SENDIRI] Ubah app/admin/page.jsx supaya daftar produk pada halaman /admin diambil langsung dari tabel produk di database Supabase menggunakan koneksi sesi admin (createSessionClient) di sisi server. Urutkan berdasarkan created_at secara descending. Jangan gunakan data contoh lagi.
+
+**Hasil:**
+- `app/admin/page.jsx` sekarang mengambil data langsung dari Supabase tabel `produk`.
+- Produk ditampilkan di tabel produk `TabelProduk` secara rapi.
+- Data contoh `lib/data-contoh.js` tidak lagi dipakai di halaman ini.
+
+**Perbaikan:**
+- Menambahkan penanganan kondisi jika tabel kosong ("Belum ada produk") dan pesan error jika query gagal.
+
+## US-07 List Produk
+
+**Prompt:**
+[SENDIRI] Ubah app/admin/page.jsx supaya daftar produk pada halaman /admin diambil langsung dari tabel produk di database Supabase menggunakan koneksi sesi admin (createSessionClient) di sisi server. Urutkan berdasarkan created_at secara descending. Jangan gunakan data contoh lagi.
+
+**Hasil:**
+- `app/admin/page.jsx` sekarang mengambil data langsung dari Supabase tabel `produk`.
+- Produk ditampilkan di tabel produk `TabelProduk` secara rapi.
+- Data contoh `lib/data-contoh.js` tidak lagi dipakai di halaman ini.
+
+**Perbaikan:**
+- Menambahkan penanganan kondisi jika tabel kosong ("Belum ada produk") dan pesan error jika query gagal.
+

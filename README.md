@@ -1,137 +1,89 @@
-# Sirait Coffee — Katalog Online + Order WhatsApp
+# Katalog UMKM + Order WhatsApp: Sirait Coffee
 
-Aplikasi katalog produk online untuk **Sirait Coffee**, sebuah usaha kopi lokal. Pengunjung dapat melihat menu, memilih jumlah pesanan, dan langsung memesan lewat WhatsApp. Admin mengelola produk melalui dashboard yang dilindungi autentikasi.
+Aplikasi katalog produk online untuk **Sirait Coffee**, sebuah usaha kopi lokal. Pengunjung dapat melihat katalog kopi dan camilan, mencari produk, memilih kategori, menentukan jumlah pesanan, dan langsung memesan lewat WhatsApp. Pemilik toko (admin) dapat masuk ke dashboard untuk mengelola produk dan mengganti password.
 
-Dibangun dengan **Next.js 16**, **Tailwind CSS 4**, dan **Supabase** — di-deploy di **Vercel**.
+Template workshop vibe coding Creative Hub App Talent (CHAT) 2026. Dibangun menggunakan **Next.js 16 (App Router)**, **Tailwind CSS 4**, dan **Supabase**.
 
-## Fitur
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fandixurniawan%2Fkatalog-umkm&project-name=katalog-umkm&repository-name=katalog-umkm)
 
-### Fitur Utama (US-01 s/d US-06)
+---
 
-| Fitur | Keterangan |
-| --- | --- |
-| **Katalog produk** | Menampilkan semua produk dari database Supabase secara server-side |
-| **Detail produk** | Halaman `/produk/[id]` menampilkan foto, nama, harga, deskripsi, dan kategori |
-| **Pesan via WhatsApp** | Tombol pesan membuka WhatsApp dengan teks otomatis berisi nama produk dan harga |
-| **Login admin** | Login email dan password menggunakan Supabase Auth + cookie (`@supabase/ssr`) |
-| **Ganti password** | Admin dapat mengganti password dengan validasi minimal 8 karakter di server |
-| **Proteksi halaman admin** | `proxy.js` (middleware Next.js 16) memblokir akses `/admin` tanpa login |
+## Fitur yang Diterapkan
 
-### Fitur Bonus (US-07 s/d US-13)
+### 1. Fitur Utama (Wajib — US-01 s/d US-06)
 
-| Fitur | Keterangan |
-| --- | --- |
-| **US-07** List produk admin | Halaman `/admin` menampilkan produk dari database, bukan data contoh |
-| **US-08** Tambah produk | Form di `/admin/produk/baru` menyimpan produk ke database |
-| **US-09** Ubah produk | Form di `/admin/produk/[id]/ubah` terisi data lama dan menyimpan perubahan |
-| **US-10** Hapus produk | Tombol hapus dengan konfirmasi browser, lalu menghapus dari database |
-| **US-11** Filter & pencarian | Pengunjung bisa menyaring produk berdasarkan kategori atau mencari nama produk |
-| **US-12** Pilih jumlah pesanan | Pengunjung memilih jumlah barang (+/−) sebelum pesan; total harga otomatis dihitung |
-| **US-13** PWA | Aplikasi bisa di-install di layar HP dengan ikon dan manifest |
+- **US-01 (Katalog dari Database):** Halaman utama menampilkan daftar produk dari tabel `produk` di Supabase secara server-side.
+- **US-02 (Detail Produk):** Halaman `/produk/[id]` menampilkan detail foto, nama, kategori, harga, dan deskripsi produk dari database. Jika produk tidak ditemukan, menampilkan halaman `notFound`.
+- **US-03 (Pesan via WhatsApp):** Tombol pesan otomatis membuka tautan WhatsApp ke nomor toko dengan format pesan nama dan harga produk ter-encode (`encodeURIComponent`).
+- **US-04 (Login Admin & Sesi):** Login admin menggunakan Supabase Auth (email dan password) dengan `@supabase/ssr` dan cookie. Serta tombol "Keluar" di navigasi untuk mengakhiri sesi.
+- **US-05 (Ganti Password):** Form ganti password di `/admin/password` dengan validasi server-side minimal 8 karakter dan konfirmasi kecocokan.
+- **US-06 (Proteksi Halaman Admin):** File `proxy.js` di root proyek (fitur middleware Next.js 16) yang menjaga seluruh rute `/admin` kecuali `/admin/login`. Jika belum login, pengunjung otomatis dialihkan ke halaman login.
+
+### 2. Fitur Tambahan (Bonus — US-07 s/d US-13)
+
+- **US-07 (List Produk Admin):** Halaman `/admin` menampilkan daftar produk langsung dari database Supabase secara realtime.
+- **US-08 (Tambah Produk):** Form di `/admin/produk/baru` untuk menambah produk baru ke database Supabase (terkunci sesi login admin).
+- **US-09 (Ubah Produk):** Form di `/admin/produk/[id]/ubah` terisi otomatis dengan data lama dan menyimpan pembaruan ke database (terkunci sesi login admin).
+- **US-10 (Hapus Produk):** Tombol hapus pada tabel admin meminta konfirmasi dialog browser sebelum menghapus produk dari database (terkunci sesi login admin).
+- **US-11 (Filter Kategori & Pencarian):** Pengunjung dapat mencari produk berdasarkan nama dan menyaring produk berdasarkan kategori di halaman katalog.
+- **US-12 (Pilih Jumlah Pesanan):** Pengunjung dapat memilih jumlah produk (+/−) sebelum memesan; total harga otomatis dihitung dan tercantum di pesan WhatsApp.
+- **US-13 (Progressive Web App - PWA):** Aplikasi dapat di-install langsung di layar HP pengunjung seperti aplikasi native dengan file `app/manifest.js` dan ikon standar.
+
+---
 
 ## Keamanan
 
-- Semua akses Supabase dilakukan di **sisi server** (Server Component, Server Action, proxy.js).
-- Environment variable **tidak** memakai awalan `NEXT_PUBLIC_`.
-- Browser **tidak pernah** menghubungi Supabase secara langsung.
-- Setiap Server Action yang mengubah data **wajib** memeriksa sesi login admin di server.
-- File `.env.local` tercantum di `.gitignore` dan tidak pernah di-commit.
+- **Server-Side Only:** Seluruh komunikasi ke Supabase dijalankan di sisi server (Server Component, Server Action, dan `proxy.js`). Browser pengunjung tidak pernah memanggil API Supabase secara langsung.
+- **Tanpa Prefiks Publik:** Environment variable tidak menggunakan awalan `NEXT_PUBLIC_` sehingga kredensial aman dari browser client.
+- **Proteksi Mutasi Data:** Setiap Server Action yang mengubah data (`tambahProduk`, `ubahProduk`, `hapusProduk`, `gantiPassword`) wajib memvalidasi sesi admin aktif di server sebelum mengeksekusi query.
+- **Git Ignore:** File `.env.local` terdaftar di `.gitignore` dan tidak pernah di-commit ke repositori Git.
+
+---
 
 ## Teknologi
 
-| Teknologi | Versi | Fungsi |
-| --- | --- | --- |
-| Next.js | 16.3.8 | Framework React dengan App Router dan Server Actions |
-| Tailwind CSS | 4.3.3 | Utility-first CSS framework |
-| Supabase | — | Database PostgreSQL, Auth, dan Row Level Security |
-| @supabase/ssr | 0.12.7 | Koneksi sesi admin dengan cookie |
-| Vercel | — | Hosting dan deployment otomatis |
+- **Framework:** Next.js 16.3.8 (App Router, Server Actions, Turbopack)
+- **Styling:** Tailwind CSS 4.3.3
+- **Database & Auth:** Supabase (`@supabase/supabase-js`, `@supabase/ssr`)
+- **Hosting:** Vercel
 
-## Struktur Folder
-
-```
-app/
-  page.jsx                  Katalog produk (US-01, US-11)
-  manifest.js               Web App Manifest (US-13)
-  produk/[id]/page.jsx      Detail produk (US-02, US-03)
-  admin/
-    actions.js              Server Action: login, keluar, ganti password, CRUD produk
-    login/page.jsx          Halaman login (US-04)
-    page.jsx                Daftar produk admin (US-07)
-    password/page.jsx       Ganti password (US-05)
-    produk/baru/page.jsx    Tambah produk (US-08)
-    produk/[id]/ubah/...    Ubah produk (US-09)
-components/
-  Header.jsx                Navbar dengan nama toko
-  Footer.jsx                Footer dengan alamat dan jam buka
-  KartuProduk.jsx           Kartu produk di katalog
-  TabelProduk.jsx           Tabel produk di halaman admin (US-10)
-  TombolWhatsApp.jsx        Tombol pesan WhatsApp + pemilih jumlah (US-03, US-12)
-  FormProduk.jsx            Form tambah/ubah produk (US-08, US-09)
-  NavAdmin.jsx              Navigasi admin + tombol keluar (US-04)
-  Tombol.jsx                Komponen tombol (utama, garis, bahaya)
-  Input.jsx                 Komponen input dan textarea
-lib/
-  toko.js                   Identitas toko dan nomor WhatsApp
-  format.js                 Format rupiah
-  supabase/server.js        Koneksi Supabase server (SUPABASE_SECRET_KEY)
-  supabase/session.js       Koneksi sesi admin (@supabase/ssr + cookie)
-proxy.js                    Proteksi rute /admin (US-06)
-```
+---
 
 ## Cara Menjalankan
 
-1. Clone repo dan install dependensi:
+1. Clone repositori ke komputer lokal:
    ```bash
    git clone https://github.com/<akunmu>/<nama-repo>.git
    cd <nama-repo>
    npm install
    ```
 
-2. Salin `.env.example` menjadi `.env.local` dan isi nilai dari dashboard Supabase:
+2. Buat file `.env.local` dari `.env.example`:
    ```bash
-   cp .env.example .env.local
+   SUPABASE_URL=https://<project-ref>.supabase.co
+   SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
+   SUPABASE_SECRET_KEY=sb_secret_...
    ```
 
 3. Jalankan server lokal:
    ```bash
    npm run dev
    ```
+   Buka `http://localhost:3000` di browser.
 
-4. Buka `http://localhost:3000`.
+---
 
-## Environment Variable
+## Sebelum Mengumpulkan
 
-| Variabel | Sumber |
-| --- | --- |
-| `SUPABASE_URL` | Supabase > Project Settings > API > Project URL |
-| `SUPABASE_PUBLISHABLE_KEY` | Supabase > Project Settings > API > anon / publishable key |
-| `SUPABASE_SECRET_KEY` | Supabase > Project Settings > API > service_role / secret key |
+1. Jalankan semua poin di `docs/checklist-keamanan.md` dan `docs/checklist-pengujian.md` pada link Vercel.
+2. Lengkapi bagian di bawah ini.
+3. Push perubahan terakhir sebelum batas waktu.
 
-> **Penting:** Jangan beri awalan `NEXT_PUBLIC_`. Jangan commit file `.env.local`.
-
-## Kustomisasi
-
-- **Identitas toko:** ubah `lib/toko.js` (nama, tagline, nomor WhatsApp, alamat, jam buka).
-- **Warna:** ubah token di `app/globals.css` bagian `@theme` (lihat `DESIGN.md`).
-- **Produk:** kelola langsung di halaman admin atau di Supabase > Table Editor > produk.
+---
 
 ## Tentang aplikasi ini
 
 - **Nama usaha:** Sirait Coffee
-- **Pembuat:** *(isi nama kamu)*
-- **Link aplikasi:** *(isi link Vercel kamu)*
-- **Fitur yang dikerjakan:**
-  - ✅ US-01 Katalog dari database
-  - ✅ US-02 Detail produk
-  - ✅ US-03 Pesan via WhatsApp
-  - ✅ US-04 Login admin
-  - ✅ US-05 Ganti password
-  - ✅ US-06 Proteksi halaman admin
-  - ✅ US-07 List produk admin dari database *(bonus)*
-  - ✅ US-08 Tambah produk *(bonus)*
-  - ✅ US-09 Ubah produk *(bonus)*
-  - ✅ US-10 Hapus produk *(bonus)*
-  - ✅ US-11 Filter kategori & pencarian *(bonus)*
-  - ✅ US-12 Pilih jumlah pesanan *(bonus)*
-  - ✅ US-13 PWA installable *(bonus)*
+- **Pembuat:** 
+- **Link aplikasi:** 
+- **Fitur bonus yang dikerjakan:** US-07 (List produk admin dari database), US-08 (Tambah produk), US-09 (Ubah produk), US-10 (Hapus produk), US-11 (Filter kategori atau pencarian), US-12 (Pilih jumlah atau varian), US-13 (PWA)

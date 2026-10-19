@@ -113,3 +113,139 @@ export async function gantiPassword(prevStateOrFormData, maybeFormData) {
 }
 
 export const updatePassword = gantiPassword;
+
+
+/**
+ * Server Action untuk menambah produk baru (US-08).
+ * Wajib memeriksa sesi login admin di server.
+ */
+export async function tambahProduk(formData) {
+  const supabase = await createSessionClient();
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    redirect(
+      "/admin/login?error=" +
+        encodeURIComponent("Sesi telah berakhir, silakan login kembali.")
+    );
+  }
+
+  const nama = formData.get("nama")?.toString().trim();
+  const harga = parseInt(formData.get("harga")?.toString() || "0", 10);
+  const kategori = formData.get("kategori")?.toString().trim() || null;
+  const foto_url = formData.get("foto_url")?.toString().trim() || null;
+  const deskripsi = formData.get("deskripsi")?.toString().trim() || null;
+
+  if (!nama || isNaN(harga) || harga < 0) {
+    redirect(
+      "/admin/produk/baru?error=" +
+        encodeURIComponent("Nama dan harga produk wajib diisi dengan benar.")
+    );
+  }
+
+  const { error } = await supabase.from("produk").insert([
+    {
+      nama,
+      harga,
+      kategori,
+      foto_url,
+      deskripsi,
+    },
+  ]);
+
+  if (error) {
+    redirect(
+      "/admin/produk/baru?error=" + encodeURIComponent(error.message)
+    );
+  }
+
+  redirect("/admin");
+}
+
+
+/**
+ * Server Action untuk mengubah produk (US-09).
+ * Wajib memeriksa sesi login admin di server.
+ */
+export async function ubahProduk(formData) {
+  const supabase = await createSessionClient();
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    redirect(
+      "/admin/login?error=" +
+        encodeURIComponent("Sesi telah berakhir, silakan login kembali.")
+    );
+  }
+
+  const id = formData.get("id");
+  const nama = formData.get("nama")?.toString().trim();
+  const harga = parseInt(formData.get("harga")?.toString() || "0", 10);
+  const kategori = formData.get("kategori")?.toString().trim() || null;
+  const foto_url = formData.get("foto_url")?.toString().trim() || null;
+  const deskripsi = formData.get("deskripsi")?.toString().trim() || null;
+
+  if (!id || !nama || isNaN(harga) || harga < 0) {
+    redirect(
+      `/admin/produk/${id}/ubah?error=` +
+        encodeURIComponent("Nama dan harga produk wajib diisi dengan benar.")
+    );
+  }
+
+  const { error } = await supabase
+    .from("produk")
+    .update({
+      nama,
+      harga,
+      kategori,
+      foto_url,
+      deskripsi,
+    })
+    .eq("id", id);
+
+  if (error) {
+    redirect(
+      `/admin/produk/${id}/ubah?error=` + encodeURIComponent(error.message)
+    );
+  }
+
+  redirect("/admin");
+}
+
+/**
+ * Server Action untuk menghapus produk (US-10).
+ * Wajib memeriksa sesi login admin di server.
+ */
+export async function hapusProduk(formData) {
+  const supabase = await createSessionClient();
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    redirect(
+      "/admin/login?error=" +
+        encodeURIComponent("Sesi telah berakhir, silakan login kembali.")
+    );
+  }
+
+  const id = formData.get("id");
+  if (!id) {
+    redirect("/admin?error=" + encodeURIComponent("ID produk tidak valid."));
+  }
+
+  const { error } = await supabase.from("produk").delete().eq("id", id);
+
+  if (error) {
+    redirect("/admin?error=" + encodeURIComponent(error.message));
+  }
+
+  redirect("/admin");
+}
